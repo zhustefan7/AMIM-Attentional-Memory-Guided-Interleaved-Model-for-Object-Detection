@@ -136,7 +136,7 @@ class VGG(nn.Module):
         super().__init__()
         self.vgg_feature = models.vgg19(pretrained=True).features
         self.features= nn.Sequential(*list(self.vgg_feature.children())[:-1])
-        self.conv = 
+        # self.conv = 
     def forward(self, x):
         output = self.features(x)
         print("vgg ouput shape", output.shape)
