@@ -23,7 +23,7 @@ from torch.utils.data import DataLoader, ConcatDataset
 from torch.optim.lr_scheduler import CosineAnnealingLR, MultiStepLR
 
 from utils.misc import str2bool, Timer, store_labels
-from network.mvod_basenet import MobileVOD, SSD, MobileNetV1, MatchPrior, VGG
+from network.mvod_basenet import MobileVOD, SSD, MobileNetV1, MatchPrior, VGG, resnet
 from datasets.vid_dataset_new import ImagenetDataset
 from network.multibox_loss import MultiboxLoss
 from config import mobilenetv1_ssd_config
@@ -213,7 +213,7 @@ if __name__ == '__main__':
 
         test_transform = TestTransform(
             config.image_size, config.image_mean, config.image_std)
-    elif args.feature == "vgg19":
+    elif args.feature == "vgg19" or "resnet18":
         train_transform = TrainAugmentation(
             244, config.image_mean, config.image_std)
         target_transform = MatchPrior(config.priors, config.center_variance,
@@ -250,6 +250,8 @@ if __name__ == '__main__':
         pred_enc = MobileNetV1(num_classes=num_classes, alpha=args.width_mult)
     elif args.feature == "vgg19":
         pred_enc = VGG()
+    elif args.feature == "resnet18":
+        pred_enc = resnet()
     pred_dec = SSD(num_classes=num_classes,
                    alpha=args.width_mult, is_test=False)
     if args.resume is None:

@@ -141,6 +141,26 @@ class VGG(nn.Module):
         output = self.features(x)
         print("vgg ouput shape", output.shape)
         return output
+    
+    
+    
+    
+class resnet(nn.Module):
+    def __init__(self, num_classes=20, inp_size=224, c_dim=3):
+        super().__init__()
+        self.resnet = models.resnet18(pretrained=False)
+        self.features= nn.Sequential(*list(self.resnet.children())[:-2])
+        self.upsample = nn.ConvTranspose2d(512, 512, 7, stride=1, 
+                                           padding=0, output_padding=0, groups=1, bias=True, dilation=2, padding_mode='zeros')
+        
+        
+    def forward(self,x):
+        output = self.features(x)
+        # print("################resnet output shape", output.shape)
+        output = self.upsample(output)
+        # print("#########shape after upsampling", output.shape)
+        return output
+        
 
 
 class MobileNetV1(nn.Module):
