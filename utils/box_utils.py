@@ -6,7 +6,8 @@ import math
 
 SSDBoxSizes = collections.namedtuple('SSDBoxSizes', ['min', 'max'])
 
-SSDSpec = collections.namedtuple('SSDSpec', ['feature_map_size', 'shrinkage', 'box_sizes', 'aspect_ratios'])
+SSDSpec = collections.namedtuple(
+    'SSDSpec', ['feature_map_size', 'shrinkage', 'box_sizes', 'aspect_ratios'])
 
 
 def generate_ssd_priors(specs: List[SSDSpec], image_size, clamp=True) -> torch.Tensor:
@@ -111,8 +112,10 @@ def convert_boxes_to_locations(center_form_boxes, center_form_priors, center_var
 	if center_form_priors.dim() + 1 == center_form_boxes.dim():
 		center_form_priors = center_form_priors.unsqueeze(0)
 	return torch.cat([
-		(center_form_boxes[..., :2] - center_form_priors[..., :2]) / center_form_priors[..., 2:] / center_variance,
-		torch.log(center_form_boxes[..., 2:] / center_form_priors[..., 2:]) / size_variance
+		(center_form_boxes[..., :2] - center_form_priors[..., :2]
+		 ) / center_form_priors[..., 2:] / center_variance,
+		torch.log(center_form_boxes[..., 2:] /
+		          center_form_priors[..., 2:]) / size_variance
 	], dim=center_form_boxes.dim() - 1)
 
 
