@@ -290,7 +290,7 @@ if __name__ == '__main__':
 		#scheduler.step()
 		train(train_loader, net, criterion, optimizer,
 			  device=DEVICE, debug_steps=args.debug_steps, epoch=epoch, sequence_length=args.sequence_length)
-		
+
 		if epoch % args.validation_epochs == 0 or epoch == args.num_epochs - 1:
 			#val_loss, val_regression_loss, val_classification_loss = val(val_loader, net, criterion, DEVICE)
 			# logging.info(
@@ -302,3 +302,12 @@ if __name__ == '__main__':
 			model_path = os.path.join(output_path, f"WM-{args.width_mult}-Epoch-{epoch}.pth")
 			torch.save(net.state_dict(), model_path)
 			logging.info(f"Saved model {model_path}")
+	# PATH = "../model/RA1/epoch-4.pt"
+	# model = MobileVOD(pred_enc, pred_dec).to(DEVICE)
+	# model.load_state_dict(torch.load(PATH), strict=False)
+	#
+	# index = torch.arange(256).type(torch.float).to(DEVICE)
+	# tmp = torch.sum(model.fc1.weight, axis=0)
+	# final = torch.stack((tmp, index), axis=0)
+	# final = final.sort(dim=1)
+	# model.duplicate_index = final.indices[0]

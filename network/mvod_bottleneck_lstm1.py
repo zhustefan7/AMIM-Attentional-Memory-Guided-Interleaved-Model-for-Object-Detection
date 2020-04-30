@@ -294,6 +294,8 @@ class SSD(nn.Module):
 		self.is_test = is_test
 		self.config = config
 		self.num_classes = num_classes
+		self.fc1 = nn.Linear(256 * alpha, 128 * alpha, bias=False)
+		self.fc2 = nn.Linear(128 * alpha, 256 * alpha, bias=False)
 		if device:
 			self.device = device
 		else:
@@ -376,6 +378,29 @@ class SSD(nn.Module):
 
 		return confidence, location
 
+	def injection(x, error_rate, duplicate_index):
+		"""
+			Simulate Error transformation.
+			:param x: tensor, input tensor (in our case CNN feature map)
+			:param error_rate: double, rate of errors
+			:return: tensor, modified tensor with error injected
+		"""
+		device = torch.device("cuda")
+		origin_shape = x.shape
+		total_dim = x[:, :128, :, :].flatten().shape[0]
+		index = torch.arange(256).type(torch.long).to(device)
+		final = torch.stack((duplicate_index, index), axis=0)
+		final = final.sort(dim=1)
+		reverse_index = final.indices[0]
+
+		x = x[:, duplicate_index, :, :].flatten()
+		random_index = torch.randperm(total_dim)[:int(total_dim * error_rate)]
+		x[random_index] = 0
+		x = x.reshape(origin_shape)
+		x = x[:, reverse_index, :, :]
+
+		return x
+
 	def forward(self, x):
 		"""
 		Arguments:
@@ -394,6 +419,11 @@ class SSD(nn.Module):
 		locations.append(location)
 		x = self.conv13(x)
 		x = self.bottleneck_lstm1(x)
+		x = x.permute(0, 2, 3, 1)
+		x = self.fc1(x)
+		x = nn.Tanh()(x)
+		x = self.fc2(x)
+		x = x.permute(0, 3, 1, 2)
 		confidence, location = self.compute_header(header_index, x)
 		header_index += 1
 		confidences.append(confidence)
