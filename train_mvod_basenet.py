@@ -122,10 +122,10 @@ def train(loader, net, criterion, optimizer, device, debug_steps=100, epoch=-1):
 
         optimizer.zero_grad()
         confidence, locations = net(images)
+        print("########confidence shape", confidence.shape)
         regression_loss, classification_loss = criterion(
             confidence, locations, labels, boxes)  # TODO CHANGE BOXES
         loss = regression_loss + classification_loss
-        print("loss",loss)
         loss.backward(retain_graph=True)
         optimizer.step()
 
@@ -171,6 +171,7 @@ def val(loader, net, criterion, device):
 
         with torch.no_grad():
             confidence, locations = net(images)
+            print("########confidence shape", confidence.shape)
             regression_loss, classification_loss = criterion(
                 confidence, locations, labels, boxes)
             loss = regression_loss + classification_loss
@@ -204,6 +205,8 @@ if __name__ == '__main__':
     logging.info(args)
 
     config = mobilenetv1_ssd_config  # config file for priors etc.
+    
+    validate = False
 
     if args.feature == "mobile_v1":
         train_transform = TrainAugmentation(
@@ -252,6 +255,7 @@ if __name__ == '__main__':
         pred_enc = VGG()
     elif args.feature == "resnet18":
         pred_enc = resnet()
+    
     pred_dec = SSD(num_classes=num_classes,
                    alpha=args.width_mult, is_test=False)
     if args.resume is None:
@@ -300,16 +304,17 @@ if __name__ == '__main__':
         train(train_loader, net, criterion, optimizer,
               device=DEVICE, debug_steps=args.debug_steps, epoch=epoch)
 
-        if epoch % args.validation_epochs == 0 or epoch == args.num_epochs - 1:
-            val_loss, val_regression_loss, val_classification_loss = val(
-                val_loader, net, criterion, DEVICE)
-            logging.info(
-                f"Epoch: {epoch}, " +
-                f"Validation Loss: {val_loss:.4f}, " +
-                f"Validation Regression Loss {val_regression_loss:.4f}, " +
-                f"Validation Classification Loss: {val_classification_loss:.4f}"
-            )
-            model_path = os.path.join(
-                output_path, f"WM-{args.width_mult}-Epoch-{epoch}-Loss-{val_loss}.pth")
-            torch.save(net.state_dict(), model_path)
-            logging.info(f"Saved model {model_path}")
+        if validate:
+            if epoch % args.validation_epochs == 0 or epoch == args.num_epochs - 1:
+                val_loss, val_regression_loss, val_classification_loss = val(
+                    val_loader, net, criterion, DEVICE)
+                logging.info(
+                    f"Epoch: {epoch}, " +
+                    f"Validation Loss: {val_loss:.4f}, " +
+                    f"Validation Regression Loss {val_regression_loss:.4f}, " +
+                    f"Validation Classification Loss: {val_classification_loss:.4f}"
+                )
+                model_path = os.path.join(
+                    output_path, f"WM-{args.width_mult}-Epoch-{epoch}-Loss-{val_loss}.pth")
+                torch.save(net.state_dict(), model_path)
+                logging.info(f"Saved model {model_path}")
