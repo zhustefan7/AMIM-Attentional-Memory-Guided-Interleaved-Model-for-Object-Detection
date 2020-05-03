@@ -32,7 +32,7 @@ class VIDDataset:
         if is_val:
             image_sets_file = "datasets/val_VID_seqs_list.txt"
         else:
-            image_sets_file = "datasets/train_VID_seqs_list.txt"
+            image_sets_file = "datasets/train_subset_VID_list.txt"
         self.seq_list = VIDDataset._read_image_seq_ids(image_sets_file)
         rem = len(self.seq_list) % batch_size
         self.seq_list = self.seq_list[:-(rem)]

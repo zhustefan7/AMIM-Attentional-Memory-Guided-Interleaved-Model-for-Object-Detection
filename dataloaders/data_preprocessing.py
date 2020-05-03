@@ -36,7 +36,6 @@ class TrainAugmentation:
         """
         return self.augment(img, boxes, labels)
 
-
 class TestTransform:
     def __init__(self, size, mean=0.0, std=1.0):
         self.transform = Compose([
