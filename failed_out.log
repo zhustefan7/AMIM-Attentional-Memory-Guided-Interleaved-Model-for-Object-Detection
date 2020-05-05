@@ -1,0 +1,120 @@
+2020-05-02 12:49:44,634 - root - INFO - Use Cuda.
+2020-05-02 12:49:44,634 - root - INFO - Namespace(base_net_lr=None, batch_size=120, cache_path='cache/', checkpoint_folder='models/', datasets='../../ILSVRC', debug_steps=100, feature='resnet18', gamma=0.1, lr=0.003, milestones='80,100', momentum=0.9, num_epochs=5, num_workers=4, pretrained=None, resume=None, scheduler='multi-step', ssd_lr=None, t_max=120, use_cuda=True, validation_epochs=2, weight_decay=0.0005, width_mult=1.0)
+2020-05-02 12:49:44,635 - root - INFO - Prepare training datasets.
+2020-05-02 12:49:44,840 - root - INFO - using default Imagenet VID classes.
+2020-05-02 12:49:58,853 - root - INFO - gt roidb loaded from cache/train_VID_gt_db.pkl
+2020-05-02 12:49:58,853 - root - INFO - Stored labels into file models/vid-model-labels.txt.
+2020-05-02 12:49:58,853 - root - INFO - Train dataset size: 1086132
+2020-05-02 12:49:58,853 - root - INFO - Prepare Validation datasets.
+2020-05-02 12:49:59,021 - root - INFO - using default Imagenet VID classes.
+2020-05-02 12:50:13,509 - root - INFO - gt roidb loaded from cache/train_VID_gt_db.pkl
+2020-05-02 12:50:13,509 - root - INFO - <datasets.vid_dataset_new.ImagenetDataset object at 0x7f2a68d4c080>
+2020-05-02 12:50:13,509 - root - INFO - validation dataset size: 1086132
+2020-05-02 12:50:13,509 - root - INFO - Build network.
+2020-05-02 12:50:13,797 - root - INFO - Initializing weights of SSD
+2020-05-02 12:50:14,964 - root - INFO - Learning rate: 0.003, Base net learning rate: 0.003, Extra Layers learning rate: 0.003.
+2020-05-02 12:50:14,964 - root - INFO - Start training from epoch 0.
+2020-05-02 12:52:29,011 - root - INFO - Epoch: 0, Step: 100, Average Loss: 110.8098, Average Regression Loss 18.9744, Average Classification Loss: 91.8353
+2020-05-02 12:54:31,733 - root - INFO - Epoch: 0, Step: 200, Average Loss: 98.2925, Average Regression Loss 6.7104, Average Classification Loss: 91.5821
+2020-05-02 12:56:37,490 - root - INFO - Epoch: 0, Step: 300, Average Loss: 74.1588, Average Regression Loss 5.7084, Average Classification Loss: 68.4504
+2020-05-02 12:58:46,228 - root - INFO - Epoch: 0, Step: 400, Average Loss: 81.7423, Average Regression Loss 5.1642, Average Classification Loss: 76.5781
+2020-05-02 13:00:52,091 - root - INFO - Epoch: 0, Step: 500, Average Loss: 74.5804, Average Regression Loss 4.3640, Average Classification Loss: 70.2164
+2020-05-02 13:02:57,858 - root - INFO - Epoch: 0, Step: 600, Average Loss: 60.8577, Average Regression Loss 4.5838, Average Classification Loss: 56.2739
+2020-05-02 13:05:03,576 - root - INFO - Epoch: 0, Step: 700, Average Loss: 55.4786, Average Regression Loss 4.3529, Average Classification Loss: 51.1258
+2020-05-02 13:07:10,978 - root - INFO - Epoch: 0, Step: 800, Average Loss: 62.5116, Average Regression Loss 4.8312, Average Classification Loss: 57.6804
+2020-05-02 13:09:16,785 - root - INFO - Epoch: 0, Step: 900, Average Loss: 65.3087, Average Regression Loss 5.2029, Average Classification Loss: 60.1057
+2020-05-02 13:11:20,961 - root - INFO - Epoch: 0, Step: 1000, Average Loss: 63.0700, Average Regression Loss 5.1513, Average Classification Loss: 57.9187
+2020-05-02 13:13:29,239 - root - INFO - Epoch: 0, Step: 1100, Average Loss: 62.8666, Average Regression Loss 5.0445, Average Classification Loss: 57.8221
+2020-05-02 13:15:38,106 - root - INFO - Epoch: 0, Step: 1200, Average Loss: 72.9857, Average Regression Loss 5.2233, Average Classification Loss: 67.7624
+2020-05-02 13:17:41,938 - root - INFO - Epoch: 0, Step: 1300, Average Loss: 73.8768, Average Regression Loss 5.3236, Average Classification Loss: 68.5533
+2020-05-02 13:19:49,993 - root - INFO - Epoch: 0, Step: 1400, Average Loss: 84.1931, Average Regression Loss 5.0034, Average Classification Loss: 79.1897
+2020-05-02 13:21:57,546 - root - INFO - Epoch: 0, Step: 1500, Average Loss: 81.4377, Average Regression Loss 5.0318, Average Classification Loss: 76.4058
+2020-05-02 13:24:06,921 - root - INFO - Epoch: 0, Step: 1600, Average Loss: 77.6330, Average Regression Loss 5.2552, Average Classification Loss: 72.3778
+2020-05-02 13:26:11,057 - root - INFO - Epoch: 0, Step: 1700, Average Loss: 89.7265, Average Regression Loss 6.1917, Average Classification Loss: 83.5349
+2020-05-02 13:28:14,246 - root - INFO - Epoch: 0, Step: 1800, Average Loss: 92.5547, Average Regression Loss 8.5579, Average Classification Loss: 83.9968
+2020-05-02 13:30:21,633 - root - INFO - Epoch: 0, Step: 1900, Average Loss: 84.4591, Average Regression Loss 6.9132, Average Classification Loss: 77.5459
+2020-05-02 13:32:25,225 - root - INFO - Epoch: 0, Step: 2000, Average Loss: 84.8515, Average Regression Loss 5.2548, Average Classification Loss: 79.5967
+2020-05-02 13:34:27,574 - root - INFO - Epoch: 0, Step: 2100, Average Loss: 94.9406, Average Regression Loss 5.1042, Average Classification Loss: 89.8364
+2020-05-02 13:36:32,101 - root - INFO - Epoch: 0, Step: 2200, Average Loss: 98.0332, Average Regression Loss 5.5685, Average Classification Loss: 92.4647
+2020-05-02 13:38:39,071 - root - INFO - Epoch: 0, Step: 2300, Average Loss: 92.0921, Average Regression Loss 5.9381, Average Classification Loss: 86.1540
+2020-05-02 13:40:47,607 - root - INFO - Epoch: 0, Step: 2400, Average Loss: 88.1632, Average Regression Loss 5.0448, Average Classification Loss: 83.1184
+2020-05-02 13:42:55,531 - root - INFO - Epoch: 0, Step: 2500, Average Loss: 82.6444, Average Regression Loss 5.1503, Average Classification Loss: 77.4941
+2020-05-02 13:44:59,749 - root - INFO - Epoch: 0, Step: 2600, Average Loss: 91.9065, Average Regression Loss 6.5463, Average Classification Loss: 85.3602
+2020-05-02 13:47:07,479 - root - INFO - Epoch: 0, Step: 2700, Average Loss: 94.9665, Average Regression Loss 7.1202, Average Classification Loss: 87.8463
+2020-05-02 13:49:14,196 - root - INFO - Epoch: 0, Step: 2800, Average Loss: 105.6695, Average Regression Loss 8.9224, Average Classification Loss: 96.7471
+2020-05-02 13:51:17,203 - root - INFO - Epoch: 0, Step: 2900, Average Loss: 99.1921, Average Regression Loss 6.5761, Average Classification Loss: 92.6161
+2020-05-02 13:53:22,516 - root - INFO - Epoch: 0, Step: 3000, Average Loss: 101.6298, Average Regression Loss 5.7364, Average Classification Loss: 95.8934
+2020-05-02 13:55:30,657 - root - INFO - Epoch: 0, Step: 3100, Average Loss: 89.6628, Average Regression Loss 5.5733, Average Classification Loss: 84.0895
+2020-05-02 13:57:37,978 - root - INFO - Epoch: 0, Step: 3200, Average Loss: 84.7230, Average Regression Loss 5.4877, Average Classification Loss: 79.2353
+2020-05-02 13:59:41,076 - root - INFO - Epoch: 0, Step: 3300, Average Loss: 102.0299, Average Regression Loss 6.6242, Average Classification Loss: 95.4056
+2020-05-02 14:01:47,746 - root - INFO - Epoch: 0, Step: 3400, Average Loss: 102.0153, Average Regression Loss 5.5723, Average Classification Loss: 96.4430
+2020-05-02 14:03:55,488 - root - INFO - Epoch: 0, Step: 3500, Average Loss: 92.8424, Average Regression Loss 6.6089, Average Classification Loss: 86.2335
+2020-05-02 14:06:02,091 - root - INFO - Epoch: 0, Step: 3600, Average Loss: 90.2197, Average Regression Loss 5.8504, Average Classification Loss: 84.3694
+2020-05-02 14:08:07,790 - root - INFO - Epoch: 0, Step: 3700, Average Loss: 88.8746, Average Regression Loss 5.4750, Average Classification Loss: 83.3996
+2020-05-02 14:10:15,369 - root - INFO - Epoch: 0, Step: 3800, Average Loss: 80.6533, Average Regression Loss 4.7166, Average Classification Loss: 75.9367
+2020-05-02 14:12:23,741 - root - INFO - Epoch: 0, Step: 3900, Average Loss: 80.9827, Average Regression Loss 4.9241, Average Classification Loss: 76.0586
+2020-05-02 14:14:29,474 - root - INFO - Epoch: 0, Step: 4000, Average Loss: 81.9821, Average Regression Loss 5.6622, Average Classification Loss: 76.3199
+2020-05-02 14:16:39,607 - root - INFO - Epoch: 0, Step: 4100, Average Loss: 80.3591, Average Regression Loss 5.4768, Average Classification Loss: 74.8822
+2020-05-02 14:18:45,361 - root - INFO - Epoch: 0, Step: 4200, Average Loss: 76.3043, Average Regression Loss 5.7530, Average Classification Loss: 70.5512
+2020-05-02 14:20:50,150 - root - INFO - Epoch: 0, Step: 4300, Average Loss: 84.7807, Average Regression Loss 6.4676, Average Classification Loss: 78.3131
+2020-05-02 14:22:56,550 - root - INFO - Epoch: 0, Step: 4400, Average Loss: 84.4912, Average Regression Loss 5.6505, Average Classification Loss: 78.8407
+2020-05-02 14:25:04,136 - root - INFO - Epoch: 0, Step: 4500, Average Loss: 93.4456, Average Regression Loss 5.7533, Average Classification Loss: 87.6923
+2020-05-02 14:27:13,959 - root - INFO - Epoch: 0, Step: 4600, Average Loss: 92.9502, Average Regression Loss 5.4045, Average Classification Loss: 87.5457
+2020-05-02 14:29:19,004 - root - INFO - Epoch: 0, Step: 4700, Average Loss: 87.8184, Average Regression Loss 5.9424, Average Classification Loss: 81.8759
+2020-05-02 14:31:24,444 - root - INFO - Epoch: 0, Step: 4800, Average Loss: 82.1796, Average Regression Loss 4.7050, Average Classification Loss: 77.4745
+2020-05-02 14:33:28,717 - root - INFO - Epoch: 0, Step: 4900, Average Loss: 76.7199, Average Regression Loss 4.9204, Average Classification Loss: 71.7994
+2020-05-02 14:35:38,817 - root - INFO - Epoch: 0, Step: 5000, Average Loss: 87.1144, Average Regression Loss 5.1017, Average Classification Loss: 82.0126
+2020-05-02 14:37:45,458 - root - INFO - Epoch: 0, Step: 5100, Average Loss: 82.2141, Average Regression Loss 4.8772, Average Classification Loss: 77.3369
+2020-05-02 14:39:52,449 - root - INFO - Epoch: 0, Step: 5200, Average Loss: 80.8592, Average Regression Loss 4.9842, Average Classification Loss: 75.8751
+2020-05-02 14:42:00,845 - root - INFO - Epoch: 0, Step: 5300, Average Loss: 77.6752, Average Regression Loss 4.9795, Average Classification Loss: 72.6957
+2020-05-02 14:44:04,186 - root - INFO - Epoch: 0, Step: 5400, Average Loss: 77.8202, Average Regression Loss 4.9605, Average Classification Loss: 72.8598
+2020-05-02 14:46:12,262 - root - INFO - Epoch: 0, Step: 5500, Average Loss: 90.2014, Average Regression Loss 5.2091, Average Classification Loss: 84.9923
+2020-05-02 14:48:20,969 - root - INFO - Epoch: 0, Step: 5600, Average Loss: 90.5491, Average Regression Loss 5.6851, Average Classification Loss: 84.8640
+2020-05-02 14:50:27,640 - root - INFO - Epoch: 0, Step: 5700, Average Loss: 92.0695, Average Regression Loss 7.2740, Average Classification Loss: 84.7955
+2020-05-02 14:52:32,050 - root - INFO - Epoch: 0, Step: 5800, Average Loss: 101.5418, Average Regression Loss 5.6901, Average Classification Loss: 95.8517
+2020-05-02 14:54:41,367 - root - INFO - Epoch: 0, Step: 5900, Average Loss: 90.1866, Average Regression Loss 5.0368, Average Classification Loss: 85.1498
+2020-05-02 14:56:46,592 - root - INFO - Epoch: 0, Step: 6000, Average Loss: 82.3990, Average Regression Loss 5.1659, Average Classification Loss: 77.2331
+2020-05-02 14:58:51,719 - root - INFO - Epoch: 0, Step: 6100, Average Loss: 90.1151, Average Regression Loss 4.9312, Average Classification Loss: 85.1839
+2020-05-02 15:01:00,218 - root - INFO - Epoch: 0, Step: 6200, Average Loss: 90.6051, Average Regression Loss 5.3226, Average Classification Loss: 85.2824
+2020-05-02 15:03:02,431 - root - INFO - Epoch: 0, Step: 6300, Average Loss: 90.1505, Average Regression Loss 5.3123, Average Classification Loss: 84.8382
+2020-05-02 15:05:05,586 - root - INFO - Epoch: 0, Step: 6400, Average Loss: 90.6257, Average Regression Loss 5.1862, Average Classification Loss: 85.4395
+2020-05-02 15:07:11,345 - root - INFO - Epoch: 0, Step: 6500, Average Loss: 85.6349, Average Regression Loss 5.8269, Average Classification Loss: 79.8079
+2020-05-02 15:09:16,261 - root - INFO - Epoch: 0, Step: 6600, Average Loss: 92.6665, Average Regression Loss 6.6574, Average Classification Loss: 86.0092
+2020-05-02 15:11:24,265 - root - INFO - Epoch: 0, Step: 6700, Average Loss: 87.4590, Average Regression Loss 5.4460, Average Classification Loss: 82.0130
+2020-05-02 15:13:32,876 - root - INFO - Epoch: 0, Step: 6800, Average Loss: 90.5186, Average Regression Loss 5.8139, Average Classification Loss: 84.7047
+2020-05-02 15:15:37,936 - root - INFO - Epoch: 0, Step: 6900, Average Loss: 82.5519, Average Regression Loss 4.9943, Average Classification Loss: 77.5576
+2020-05-02 15:17:48,797 - root - INFO - Epoch: 0, Step: 7000, Average Loss: 86.6332, Average Regression Loss 5.0377, Average Classification Loss: 81.5955
+2020-05-02 15:19:56,356 - root - INFO - Epoch: 0, Step: 7100, Average Loss: 89.9193, Average Regression Loss 4.7655, Average Classification Loss: 85.1538
+2020-05-02 15:22:00,176 - root - INFO - Epoch: 0, Step: 7200, Average Loss: 93.4792, Average Regression Loss 4.7292, Average Classification Loss: 88.7500
+2020-05-02 15:24:03,328 - root - INFO - Epoch: 0, Step: 7300, Average Loss: 93.6575, Average Regression Loss 5.0117, Average Classification Loss: 88.6459
+2020-05-02 15:26:11,249 - root - INFO - Epoch: 0, Step: 7400, Average Loss: 85.6879, Average Regression Loss 5.0508, Average Classification Loss: 80.6371
+2020-05-02 15:28:18,220 - root - INFO - Epoch: 0, Step: 7500, Average Loss: 92.6385, Average Regression Loss 4.8161, Average Classification Loss: 87.8224
+2020-05-02 15:30:27,174 - root - INFO - Epoch: 0, Step: 7600, Average Loss: 88.4517, Average Regression Loss 4.8751, Average Classification Loss: 83.5765
+2020-05-02 15:32:33,499 - root - INFO - Epoch: 0, Step: 7700, Average Loss: 83.6427, Average Regression Loss 5.2246, Average Classification Loss: 78.4181
+2020-05-02 15:34:34,104 - root - INFO - Epoch: 0, Step: 7800, Average Loss: 93.4211, Average Regression Loss 5.0220, Average Classification Loss: 88.3991
+2020-05-02 15:36:36,576 - root - INFO - Epoch: 0, Step: 7900, Average Loss: 90.5871, Average Regression Loss 4.7780, Average Classification Loss: 85.8090
+2020-05-02 15:38:43,623 - root - INFO - Epoch: 0, Step: 8000, Average Loss: 82.6053, Average Regression Loss 5.0926, Average Classification Loss: 77.5126
+2020-05-02 15:40:52,241 - root - INFO - Epoch: 0, Step: 8100, Average Loss: 82.3662, Average Regression Loss 4.8788, Average Classification Loss: 77.4874
+2020-05-02 15:42:58,352 - root - INFO - Epoch: 0, Step: 8200, Average Loss: 82.1963, Average Regression Loss 4.8120, Average Classification Loss: 77.3844
+2020-05-02 15:45:04,098 - root - INFO - Epoch: 0, Step: 8300, Average Loss: 83.1392, Average Regression Loss 5.0582, Average Classification Loss: 78.0809
+2020-05-02 15:47:12,271 - root - INFO - Epoch: 0, Step: 8400, Average Loss: 87.1843, Average Regression Loss 4.5704, Average Classification Loss: 82.6139
+2020-05-02 15:49:23,230 - root - INFO - Epoch: 0, Step: 8500, Average Loss: 86.4904, Average Regression Loss 4.5475, Average Classification Loss: 81.9430
+2020-05-02 15:51:29,092 - root - INFO - Epoch: 0, Step: 8600, Average Loss: 84.2053, Average Regression Loss 4.6863, Average Classification Loss: 79.5190
+2020-05-02 15:53:37,823 - root - INFO - Epoch: 0, Step: 8700, Average Loss: 86.8333, Average Regression Loss 4.7742, Average Classification Loss: 82.0592
+2020-05-02 15:55:47,238 - root - INFO - Epoch: 0, Step: 8800, Average Loss: 80.8483, Average Regression Loss 5.0319, Average Classification Loss: 75.8165
+2020-05-02 15:57:56,475 - root - INFO - Epoch: 0, Step: 8900, Average Loss: 90.5075, Average Regression Loss 5.2347, Average Classification Loss: 85.2727
+2020-05-02 16:00:04,390 - root - INFO - Epoch: 0, Step: 9000, Average Loss: 90.3797, Average Regression Loss 4.7725, Average Classification Loss: 85.6072
+/home/stars/anaconda3/envs/vlrproj/lib/python3.6/site-packages/torch/nn/_reduction.py:43: UserWarning: size_average and reduce args will be deprecated, please use reduction='sum' instead.
+  warnings.warn(warning.format(ret))
+Traceback (most recent call last):
+  File "train_mvod_basenet.py", line 402, in <module>
+    val_loader, net, criterion, DEVICE
+  File "train_mvod_basenet.py", line 212, in val
+    confidence, locations, labels, boxes
+  File "/home/stars/anaconda3/envs/vlrproj/lib/python3.6/site-packages/torch/nn/modules/module.py", line 550, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/stars/Code/tarang/proj/code2/AMIM-Attentional-Memory-Guided-Interleaved-Model-for-Object-Detection/network/multibox_loss.py", line 41, in forward
+    mask = box_utils.hard_negative_mining(loss, labels, self.neg_pos_ratio)
+  File "/home/stars/Code/tarang/proj/code2/AMIM-Attentional-Memory-Guided-Interleaved-Model-for-Object-Detection/utils/box_utils.py", line 205, in hard_negative_mining
+    loss[pos_mask] = -math.inf
+IndexError: The shape of the mask [120, 3234] at index 1 does not match the shape of the indexed tensor [120, 3000] at index 1
