@@ -1,0 +1,2 @@
+#basenet
+CUDA_VISIBLE_DEVICES=2 python train_mvod_lstm1.py --datasets ../../ILSVRC --cache_path "cache/" --batch_size 120 --num_epochs 10 --width_mult 1 --feature resnet18 --debug_steps 10  --pretrained ./WM-1.0-Epoch-4-Loss-7.739257007516841.pth --freeze_net >lstm_net_out.log 2>&1 &

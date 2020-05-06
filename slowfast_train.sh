@@ -1,0 +1,1 @@
+CUDA_VISIBLE_DEVICES=0 python train_fast_slow_mvod_lstm1.py --datasets ../../ILSVRC --cache_path cache/    --batch_size 1 --num_epochs 10 --width_mult 1 --feature fast_slow  --pretrained ./WM-1.0-Epoch-4-Loss-7.739257007516841.pth --freeze_net  >slowfast_out.log 2>&1 &

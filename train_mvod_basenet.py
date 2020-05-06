@@ -31,7 +31,7 @@ from dataloaders.data_preprocessing import TrainAugmentation, TestTransform
 
 from torch.utils.tensorboard import SummaryWriter
 
-tb_logger = SummaryWriter()
+tb_logger = SummaryWriter(log_dir="runs/basenet")
 parser = argparse.ArgumentParser(
     description="Mobile Video Object Detection (Bottleneck LSTM) Training With Pytorch"
 )
@@ -152,6 +152,7 @@ def train(loader, net, criterion, optimizer, device, debug_steps=100, epoch=-1):
     running_loss = 0.0
     running_regression_loss = 0.0
     running_classification_loss = 0.0
+    datasize = len(loader)
     for i, data in enumerate(loader):
         # print("inside train loop", i)
         images, boxes, labels = data
@@ -190,9 +191,10 @@ def train(loader, net, criterion, optimizer, device, debug_steps=100, epoch=-1):
                 + f"Average Regression Loss {avg_reg_loss:.4f}, "
                 + f"Average Classification Loss: {avg_clf_loss:.4f}"
             )
-            tb_logger.add_scalar("train/Loss/average", avg_loss, i)
-            tb_logger.add_scalar("train/Loss/regression", avg_reg_loss, i)
-            tb_logger.add_scalar("train/Loss/classification", avg_clf_loss, i)
+            step = epoch * datasize + i
+            tb_logger.add_scalar("train/Loss/average", avg_loss, step)
+            tb_logger.add_scalar("train/Loss/regression", avg_reg_loss, step)
+            tb_logger.add_scalar("train/Loss/classification", avg_clf_loss, step)
             running_loss = 0.0
             running_regression_loss = 0.0
             running_classification_loss = 0.0
@@ -222,7 +224,7 @@ def val(loader, net, criterion, device):
         confidence, locations = net(images)
         with torch.no_grad():
             confidence, locations = net(images)
-            print("########Validation confidence shape", confidence.shape)
+            # print("########Validation confidence shape", confidence.shape)
             # print(
             #     "VAL:########confidence shape",
             #     confidence.shape,

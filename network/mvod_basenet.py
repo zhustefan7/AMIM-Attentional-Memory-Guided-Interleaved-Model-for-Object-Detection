@@ -29,11 +29,18 @@ def SeperableConv2d(in_channels, out_channels, kernel_size=1, stride=1, padding=
             object of class torch.nn.Sequential
     """
     return nn.Sequential(
-        nn.Conv2d(in_channels=int(in_channels), out_channels=int(in_channels), kernel_size=kernel_size,
-                  groups=int(in_channels), stride=stride, padding=padding),
+        nn.Conv2d(
+            in_channels=int(in_channels),
+            out_channels=int(in_channels),
+            kernel_size=kernel_size,
+            groups=int(in_channels),
+            stride=stride,
+            padding=padding,
+        ),
         nn.ReLU6(),
-        nn.Conv2d(in_channels=int(in_channels),
-                  out_channels=int(out_channels), kernel_size=1),
+        nn.Conv2d(
+            in_channels=int(in_channels), out_channels=int(out_channels), kernel_size=1
+        ),
     )
 
 
@@ -49,7 +56,7 @@ def conv_bn(inp, oup, stride):
     return nn.Sequential(
         nn.Conv2d(int(inp), int(oup), 3, stride, 1, bias=False),
         nn.BatchNorm2d(int(oup)),
-        nn.ReLU6(inplace=True)
+        nn.ReLU6(inplace=True),
     )
 
 
@@ -64,11 +71,9 @@ def conv_dw(inp, oup, stride):
             object of class torch.nn.Sequential
     """
     return nn.Sequential(
-        nn.Conv2d(int(inp), int(inp), 3, stride,
-                  1, groups=int(inp), bias=False),
+        nn.Conv2d(int(inp), int(inp), 3, stride, 1, groups=int(inp), bias=False),
         nn.BatchNorm2d(int(inp)),
         nn.ReLU6(inplace=True),
-
         nn.Conv2d(int(inp), int(oup), 1, 1, 0, bias=False),
         nn.BatchNorm2d(int(oup)),
         nn.ReLU6(inplace=True),
@@ -84,10 +89,13 @@ class MatchPrior(object):
             iou_threshold : a float value of thresholf of IOU
     """
 
-    def __init__(self, center_form_priors, center_variance, size_variance, iou_threshold):
+    def __init__(
+        self, center_form_priors, center_variance, size_variance, iou_threshold
+    ):
         self.center_form_priors = center_form_priors
         self.corner_form_priors = box_utils.center_form_to_corner_form(
-            center_form_priors)
+            center_form_priors
+        )
         self.center_variance = center_variance
         self.size_variance = size_variance
         self.iou_threshold = iou_threshold
@@ -104,11 +112,13 @@ class MatchPrior(object):
             gt_boxes = torch.from_numpy(gt_boxes)
         if type(gt_labels) is np.ndarray:
             gt_labels = torch.from_numpy(gt_labels)
-        boxes, labels = box_utils.assign_priors(gt_boxes, gt_labels,
-                                                self.corner_form_priors, self.iou_threshold)
+        boxes, labels = box_utils.assign_priors(
+            gt_boxes, gt_labels, self.corner_form_priors, self.iou_threshold
+        )
         boxes = box_utils.corner_form_to_center_form(boxes)
         locations = box_utils.convert_boxes_to_locations(
-            boxes, self.center_form_priors, self.center_variance, self.size_variance)
+            boxes, self.center_form_priors, self.center_variance, self.size_variance
+        )
         return locations, labels
 
 
@@ -128,37 +138,53 @@ def crop_like(x, target):
         crop_h = torch.FloatTensor([x.size()[2]]).sub(height).div(-2)
         crop_w = torch.FloatTensor([x.size()[3]]).sub(width).div(-2)
     # fixed indexing for PyTorch 0.4
-    return F.pad(x, [int(crop_w.ceil()[0]), int(crop_w.floor()[0]), int(crop_h.ceil()[0]), int(crop_h.floor()[0])])
+    return F.pad(
+        x,
+        [
+            int(crop_w.ceil()[0]),
+            int(crop_w.floor()[0]),
+            int(crop_h.ceil()[0]),
+            int(crop_h.floor()[0]),
+        ],
+    )
 
 
 class VGG(nn.Module):
     def __init__(self, num_classes=1024, alpha=1):
         super().__init__()
         self.vgg_feature = models.vgg19(pretrained=True).features
-        self.features= nn.Sequential(*list(self.vgg_feature.children())[:-1])
-        # self.conv = 
+        self.features = nn.Sequential(*list(self.vgg_feature.children())[:-1])
+        # self.conv =
+
     def forward(self, x):
         output = self.features(x)
         print("vgg ouput shape", output.shape)
         return output
-    
-    
-    
-    
+
+
 class resnet(nn.Module):
-    def __init__(self, num_classes=20, inp_size=224, c_dim=3):
+    def __init__(self, num_classes=20, inp_size=224, c_dim=3, pretrained=True):
         super().__init__()
-        self.resnet = models.resnet18(pretrained=False)
+        self.resnet = models.resnet18(pretrained=pretrained)
         # print(list(self.resnet.children()))
-        self.features= nn.Sequential(*list(self.resnet.children())[:-2])
-        self.upsample = nn.ConvTranspose2d(512, 512, 7, stride=1, 
-                                           padding=0, output_padding=1, groups=1, bias=True, dilation=2, padding_mode='zeros')
-        
-        
-    def forward(self,x):
+        self.features = nn.Sequential(*list(self.resnet.children())[:-2])
+        self.upsample = nn.ConvTranspose2d(
+            512,
+            512,
+            7,
+            stride=1,
+            padding=0,
+            output_padding=1,
+            groups=1,
+            bias=True,
+            dilation=2,
+            padding_mode="zeros",
+        )
+
+    def forward(self, x):
         output = self.features(x)
         output = self.upsample(output)
-        print("!!!!!!resnet ouput shape", output.shape)
+        # print("!!!!!!resnet ouput shape", output.shape)
         return output
 
 
@@ -166,17 +192,25 @@ class fast_resnet(nn.Module):
     def __init__(self, num_classes=20, inp_size=224, c_dim=3):
         super().__init__()
         self.resnet = models.resnet18(pretrained=False)
-        self.features= nn.Sequential(*list(self.resnet.children())[:-3])
-        self.upsample = nn.ConvTranspose2d(512, 512, 7, stride=1, 
-                                           padding=0, output_padding=1, groups=1, bias=True, dilation=2, padding_mode='zeros')
-        
-        
-    def forward(self,x):
+        self.features = nn.Sequential(*list(self.resnet.children())[:-3])
+        self.upsample = nn.ConvTranspose2d(
+            512,
+            512,
+            7,
+            stride=1,
+            padding=0,
+            output_padding=1,
+            groups=1,
+            bias=True,
+            dilation=2,
+            padding_mode="zeros",
+        )
+
+    def forward(self, x):
         output = self.features(x)
         output = self.upsample(output)
-        print("fast resnet ouput shape", output.shape)
+        # print("fast resnet ouput shape", output.shape)
         return output
-        
 
 
 class MobileNetV1(nn.Module):
@@ -189,22 +223,22 @@ class MobileNetV1(nn.Module):
         super(MobileNetV1, self).__init__()
         # upto conv 12
         self.model = nn.Sequential(
-            conv_bn(3, 32*alpha, 2),
-            conv_dw(32*alpha, 64*alpha, 1),
-            conv_dw(64*alpha, 128*alpha, 2),
-            conv_dw(128*alpha, 128*alpha, 1),
-            conv_dw(128*alpha, 256*alpha, 2),
-            conv_dw(256*alpha, 256*alpha, 1),
-            conv_dw(256*alpha, 512*alpha, 2),
-            conv_dw(512*alpha, 512*alpha, 1),
-            conv_dw(512*alpha, 512*alpha, 1),
-            conv_dw(512*alpha, 512*alpha, 1),
-            conv_dw(512*alpha, 512*alpha, 1),
-            conv_dw(512*alpha, 512*alpha, 1),
+            conv_bn(3, 32 * alpha, 2),
+            conv_dw(32 * alpha, 64 * alpha, 1),
+            conv_dw(64 * alpha, 128 * alpha, 2),
+            conv_dw(128 * alpha, 128 * alpha, 1),
+            conv_dw(128 * alpha, 256 * alpha, 2),
+            conv_dw(256 * alpha, 256 * alpha, 1),
+            conv_dw(256 * alpha, 512 * alpha, 2),
+            conv_dw(512 * alpha, 512 * alpha, 1),
+            conv_dw(512 * alpha, 512 * alpha, 1),
+            conv_dw(512 * alpha, 512 * alpha, 1),
+            conv_dw(512 * alpha, 512 * alpha, 1),
+            conv_dw(512 * alpha, 512 * alpha, 1),
         )
         logging.info("Initializing weights of base net")
         self._initialize_weights()
-        #self.fc = nn.Linear(1024, num_classes)
+        # self.fc = nn.Linear(1024, num_classes)
 
     def _initialize_weights(self):
         """
@@ -229,7 +263,7 @@ class MobileNetV1(nn.Module):
         """
         print(x.shape)
         x = self.model(x)
-        print("mobilenet output shape",x.shape)
+        # print("mobilenet output shape", x.shape)
         return x
 
 
@@ -250,71 +284,150 @@ class SSD(nn.Module):
         if device:
             self.device = device
         else:
-            self.device = torch.device(
-                "cuda:0" if torch.cuda.is_available() else "cpu")
+            self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         if is_test:
             self.config = config
             self.priors = config.priors.to(self.device)
-        self.conv13 = conv_dw(512*alpha, 1024*alpha, 2)
+        self.conv13 = conv_dw(512 * alpha, 1024 * alpha, 2)
         # to be pruned while adding LSTM layers
-        self.conv14 = conv_dw(1024*alpha, 1024*alpha, 1)
+        self.conv14 = conv_dw(1024 * alpha, 1024 * alpha, 1)
         self.fmaps_1 = nn.Sequential(
-            nn.Conv2d(in_channels=int(1024*alpha),
-                      out_channels=int(256*alpha), kernel_size=1),
+            nn.Conv2d(
+                in_channels=int(1024 * alpha),
+                out_channels=int(256 * alpha),
+                kernel_size=1,
+            ),
             nn.ReLU6(inplace=True),
-            SeperableConv2d(in_channels=256*alpha, out_channels=512 *
-                            alpha, kernel_size=3, stride=2, padding=1),
+            SeperableConv2d(
+                in_channels=256 * alpha,
+                out_channels=512 * alpha,
+                kernel_size=3,
+                stride=2,
+                padding=1,
+            ),
         )
         self.fmaps_2 = nn.Sequential(
-            nn.Conv2d(in_channels=int(512*alpha),
-                      out_channels=int(128*alpha), kernel_size=1),
+            nn.Conv2d(
+                in_channels=int(512 * alpha),
+                out_channels=int(128 * alpha),
+                kernel_size=1,
+            ),
             nn.ReLU6(inplace=True),
-            SeperableConv2d(in_channels=128*alpha, out_channels=256 *
-                            alpha, kernel_size=3, stride=2, padding=1),
+            SeperableConv2d(
+                in_channels=128 * alpha,
+                out_channels=256 * alpha,
+                kernel_size=3,
+                stride=2,
+                padding=1,
+            ),
         )
         self.fmaps_3 = nn.Sequential(
-            nn.Conv2d(in_channels=int(256*alpha),
-                      out_channels=int(128*alpha), kernel_size=1),
+            nn.Conv2d(
+                in_channels=int(256 * alpha),
+                out_channels=int(128 * alpha),
+                kernel_size=1,
+            ),
             nn.ReLU6(inplace=True),
-            SeperableConv2d(in_channels=128*alpha, out_channels=256 *
-                            alpha, kernel_size=3, stride=2, padding=1),
+            SeperableConv2d(
+                in_channels=128 * alpha,
+                out_channels=256 * alpha,
+                kernel_size=3,
+                stride=2,
+                padding=1,
+            ),
         )
         self.fmaps_4 = nn.Sequential(
-            nn.Conv2d(in_channels=int(256*alpha),
-                      out_channels=int(128*alpha), kernel_size=1),
+            nn.Conv2d(
+                in_channels=int(256 * alpha),
+                out_channels=int(128 * alpha),
+                kernel_size=1,
+            ),
             nn.ReLU6(inplace=True),
-            SeperableConv2d(in_channels=128*alpha, out_channels=256 *
-                            alpha, kernel_size=3, stride=2, padding=1),
+            SeperableConv2d(
+                in_channels=128 * alpha,
+                out_channels=256 * alpha,
+                kernel_size=3,
+                stride=2,
+                padding=1,
+            ),
         )
-        self.regression_headers = nn.ModuleList([
-            SeperableConv2d(in_channels=512*alpha,
-                            out_channels=6 * 4, kernel_size=3, padding=1),
-            SeperableConv2d(in_channels=1024*alpha,
-                            out_channels=6 * 4, kernel_size=3, padding=1),
-            SeperableConv2d(in_channels=512*alpha,
-                            out_channels=6 * 4, kernel_size=3, padding=1),
-            SeperableConv2d(in_channels=256*alpha,
-                            out_channels=6 * 4, kernel_size=3, padding=1),
-            SeperableConv2d(in_channels=256*alpha,
-                            out_channels=6 * 4, kernel_size=3, padding=1),
-            nn.Conv2d(in_channels=int(256*alpha),
-                      out_channels=6 * 4, kernel_size=1),
-        ])
+        self.regression_headers = nn.ModuleList(
+            [
+                SeperableConv2d(
+                    in_channels=512 * alpha,
+                    out_channels=6 * 4,
+                    kernel_size=3,
+                    padding=1,
+                ),
+                SeperableConv2d(
+                    in_channels=1024 * alpha,
+                    out_channels=6 * 4,
+                    kernel_size=3,
+                    padding=1,
+                ),
+                SeperableConv2d(
+                    in_channels=512 * alpha,
+                    out_channels=6 * 4,
+                    kernel_size=3,
+                    padding=1,
+                ),
+                SeperableConv2d(
+                    in_channels=256 * alpha,
+                    out_channels=6 * 4,
+                    kernel_size=3,
+                    padding=1,
+                ),
+                SeperableConv2d(
+                    in_channels=256 * alpha,
+                    out_channels=6 * 4,
+                    kernel_size=3,
+                    padding=1,
+                ),
+                nn.Conv2d(
+                    in_channels=int(256 * alpha), out_channels=6 * 4, kernel_size=1
+                ),
+            ]
+        )
 
-        self.classification_headers = nn.ModuleList([
-            SeperableConv2d(in_channels=512*alpha, out_channels=6 *
-                            num_classes, kernel_size=3, padding=1),
-            SeperableConv2d(in_channels=1024*alpha, out_channels=6 *
-                            num_classes, kernel_size=3, padding=1),
-            SeperableConv2d(in_channels=512*alpha, out_channels=6 *
-                            num_classes, kernel_size=3, padding=1),
-            SeperableConv2d(in_channels=256*alpha, out_channels=6 *
-                            num_classes, kernel_size=3, padding=1),
-            SeperableConv2d(in_channels=256*alpha, out_channels=6 *
-                            num_classes, kernel_size=3, padding=1),
-            nn.Conv2d(in_channels=int(256*alpha),
-                      out_channels=6 * num_classes, kernel_size=1),
-        ])
+        self.classification_headers = nn.ModuleList(
+            [
+                SeperableConv2d(
+                    in_channels=512 * alpha,
+                    out_channels=6 * num_classes,
+                    kernel_size=3,
+                    padding=1,
+                ),
+                SeperableConv2d(
+                    in_channels=1024 * alpha,
+                    out_channels=6 * num_classes,
+                    kernel_size=3,
+                    padding=1,
+                ),
+                SeperableConv2d(
+                    in_channels=512 * alpha,
+                    out_channels=6 * num_classes,
+                    kernel_size=3,
+                    padding=1,
+                ),
+                SeperableConv2d(
+                    in_channels=256 * alpha,
+                    out_channels=6 * num_classes,
+                    kernel_size=3,
+                    padding=1,
+                ),
+                SeperableConv2d(
+                    in_channels=256 * alpha,
+                    out_channels=6 * num_classes,
+                    kernel_size=3,
+                    padding=1,
+                ),
+                nn.Conv2d(
+                    in_channels=int(256 * alpha),
+                    out_channels=6 * num_classes,
+                    kernel_size=1,
+                ),
+            ]
+        )
 
         logging.info("Initializing weights of SSD")
         self._initialize_weights()
@@ -401,7 +514,10 @@ class SSD(nn.Module):
         if self.is_test:
             confidences = F.softmax(confidences, dim=2)
             boxes = box_utils.convert_locations_to_boxes(
-                locations, self.priors, self.config.center_variance, self.config.size_variance
+                locations,
+                self.priors,
+                self.config.center_variance,
+                self.config.size_variance,
             )
             boxes = box_utils.center_form_to_corner_form(boxes)
             return confidences, boxes
@@ -434,4 +550,3 @@ class MobileVOD(nn.Module):
         x = self.pred_encoder(seq)
         confidences, locations = self.pred_decoder(x)
         return confidences, locations
-

@@ -205,8 +205,8 @@ class BottleneckLSTMCell(nn.Module):
             output tensor after LSTM cell 
         """
         x = self.W(x)
-        # print("input tensor size", x.shape)
-        # print("hidden state size", h.shape)
+        print("input tensor size", x.shape)
+        print("hidden state size", h.shape)
         y = torch.cat((x, h), 1)  # concatenate input and hidden layers
         i = self.Wy(y)  # reduce to hidden layer size
         b = self.Wi(i)  # depth wise 3*3
@@ -369,7 +369,7 @@ class resnet(nn.Module):
     def forward(self, x):
         output = self.features(x)
         output = self.upsample(output)
-        # print("!!!!!!resnet ouput shape", output.shape)
+        print("!!!!!!resnet ouput shape", output.shape)
         return output
 
 
@@ -390,9 +390,6 @@ class SSD(nn.Module):
         self.is_test = is_test
         self.config = config
         self.num_classes = num_classes
-        alpha = int(alpha)
-        self.fc1 = nn.Linear(256 * alpha, 128 * alpha, bias=False)
-        self.fc2 = nn.Linear(128 * alpha, 256 * alpha, bias=False)
         if device:
             self.device = device
         else:
@@ -553,9 +550,9 @@ class SSD(nn.Module):
 
     def _initialize_weights(self):
         """
-		Returns:
-			initialized weights of the model
-		"""
+        Returns:
+            initialized weights of the model
+        """
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
                 nn.init.xavier_uniform_(m.weight)
@@ -567,12 +564,12 @@ class SSD(nn.Module):
 
     def compute_header(self, i, x):  # ssd method to calculate headers
         """
-		Arguments:
-			i : an int used to use particular classification and regression layer
-			x : a tensor used as input to layers
-		Returns:
-			locations and confidences of the predictions
-		"""
+        Arguments:
+            i : an int used to use particular classification and regression layer
+            x : a tensor used as input to layers
+        Returns:
+            locations and confidences of the predictions
+        """
         confidence = self.classification_headers[i](x)
         confidence = confidence.permute(0, 2, 3, 1).contiguous()
         confidence = confidence.view(confidence.size(0), -1, self.num_classes)
@@ -583,38 +580,15 @@ class SSD(nn.Module):
 
         return confidence, location
 
-    def injection(x, error_rate, duplicate_index):
-        """
-			Simulate Error transformation.
-			:param x: tensor, input tensor (in our case CNN feature map)
-			:param error_rate: double, rate of errors
-			:return: tensor, modified tensor with error injected
-		"""
-        device = torch.device("cuda")
-        origin_shape = x.shape
-        total_dim = x[:, :128, :, :].flatten().shape[0]
-        index = torch.arange(256).type(torch.long).to(device)
-        final = torch.stack((duplicate_index, index), axis=0)
-        final = final.sort(dim=1)
-        reverse_index = final.indices[0]
-
-        x = x[:, duplicate_index, :, :].flatten()
-        random_index = torch.randperm(total_dim)[: int(total_dim * error_rate)]
-        x[random_index] = 0
-        x = x.reshape(origin_shape)
-        x = x[:, reverse_index, :, :]
-
-        return x
-
     def forward(self, x):
         """
-		Arguments:
-			x : a tensor which is used as input for the model
-		Returns:
-			confidences and locations of predictions made by model during training
-			or
-			confidences and boxes of predictions made by model during testing
-		"""
+        Arguments:
+            x : a tensor which is used as input for the model
+        Returns:
+            confidences and locations of predictions made by model during training
+            or
+            confidences and boxes of predictions made by model during testing
+        """
         confidences = []
         locations = []
         header_index = 0
@@ -624,11 +598,6 @@ class SSD(nn.Module):
         locations.append(location)
         x = self.conv13(x)
         x = self.bottleneck_lstm1(x)
-        x = x.permute(0, 2, 3, 1)
-        x = self.fc1(x)
-        x = nn.Tanh()(x)
-        x = self.fc2(x)
-        x = x.permute(0, 3, 1, 2)
         confidence, location = self.compute_header(header_index, x)
         header_index += 1
         confidences.append(confidence)
@@ -693,7 +662,7 @@ class MobileVOD(nn.Module):
             confidences and locations of predictions made by model
         """
         x = self.pred_encoder(seq)
-        # print("!!!!!!!!!!!!!!!!!!!!!!!!!mobile net output size", x.shape)
+        print("!!!!!!!!!!!!!!!!!!!!!!!!!mobile net output size", x.shape)
         confidences, locations = self.pred_decoder(x)
         return confidences, locations
 
